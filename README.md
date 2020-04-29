@@ -14,8 +14,11 @@ Edit the contents of package.json to reflect the new name
 ## Scripts
 
 `npm start` --- starts the application
+
 `npm run dev` --- starts using nodemon to enable live reloads
+
 `npm test` --- runs tests
+
 `npm deploy` --- deploys the app once Heroku has been configured
 
 ## Deploying
