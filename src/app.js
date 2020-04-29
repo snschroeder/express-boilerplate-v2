@@ -6,8 +6,14 @@ const helmet = require('helmet'); // hides sensitive data
 const errorHandler = require('./misc/errorHandler');
 const { NODE_ENV } = require('./config');
 
-const app = express();
+const validationHandler = require('./misc/validationHandler'); // basic validation middleware
+const validateBearerToken = require('./misc/validateBearerToken');
 
+//===================//
+// Initial setup     //
+//===================//
+
+const app = express();
 const morganOutput = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 //===================//
@@ -18,13 +24,23 @@ app.use(morgan(morganOutput));
 app.use(helmet());
 app.use(cors());
 
+app.use(express.json());
+app.use(validateBearerToken);
+
 //===================//
-// Routs             //
+// Routes            //
 //===================//
 
 app.get('/', (req, res) => {
   res.send('Hello there');
 });
+
+app.post('/user', (req, res) => {
+  const requiredInput = ['username', 'password', 'favoriteClub'];
+  validationHandler(req, res, requiredInput);
+  res.send('all validation passed');
+})
+
 //===================//
 // Error Handling    //
 //===================//
