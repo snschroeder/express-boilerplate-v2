@@ -2,7 +2,7 @@
 
 ## Set up
 
-1. `git clone BOILERPLATE-URL NEW-PROJECTS-NAME` --- Clones this repo
+1. `git clone https://github.com/snschroeder/express-boilerplate-v2.git NEW-PROJECTS-NAME` --- Clones this repo
 2. `rm -rf .git && git init` --- Creates a fresh git file
 3. `npm install` --- Installs dependencies
 4. `mv example.env .env` --- creates .env file
