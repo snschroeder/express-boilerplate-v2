@@ -15,7 +15,7 @@ Edit the contents of package.json to reflect the new name
 
 `npm start` --- starts the application
 
-`npm run dev` --- starts using nodemon to enable live reloads
+`npm run dev` --- starts the application using nodemon to enable live reloads
 
 `npm test` --- runs tests
 
