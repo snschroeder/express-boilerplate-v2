@@ -27,14 +27,14 @@ Edit the contents of package.json to reflect the new name
 
 `heroku create` can be used to create a new Heroku application
 
-## In-depth deployment on heroku
+## In-depth deployment on Heroku
 
 Heroku is a cloud hosting platform that works well for hosting servers. It includes integration for databases, logging, monitoring, email alerts and more. They offer a free tier to get started.
 
 1. Create a Heroku account --- https://signup.heroku.com/identity
 2. Download the Heroku CLI --- https://devcenter.heroku.com/articles/heroku-cli#download-and-install
 3. `heroku --version` --- verifies install was successful
-4. `heroku login` --- logs you in ---  (Note: Windows is dumb so you might need to run this command from cmd.exe)
+4. `heroku login` --- logs you in (Note: Windows is dumb so you might need to run this command from cmd.exe)
 
 ## Necessary housekeeping before we deploy
 
@@ -44,7 +44,7 @@ Heroku is a cloud hosting platform that works well for hosting servers. It inclu
 4. Audit your packages --- this will automatically happen when you run `npm deploy`. I'm including it here because out-of-date packages can be a security risk. Take this seriously and ensure everything is up-to-date.
 
 ## Housekeeping that has already been done
-# Come back to this section if you did something dumb and want to know where to look to fix it
+### Come back to this section if you did something dumb and want to know where to look to fix it
 
 1. Respect the PORT --- only worry about this if you messed with the config.js file.
 2. Minimize logging --- only worry about this if you messed with the morgan settings in app.js
@@ -92,4 +92,11 @@ Consider using a Continuous Integration service, such as:
 
 These services will monitor the main branch and deploy it for you, though they also offer features such as running tests, sending email notifications when changes are pushed to master, and allowing for an approval process before the changes go live.
 
-Another note: devDependencies are NOT installed when you deploy to Heroku. For this reason(and others), it's important to stage your changes and test them in a "live" environment before deploying to end-users. 
+Another note: devDependencies are NOT installed when you deploy to Heroku. For this reason(and others), it's important to stage your changes and test them in a "live" environment before deploying to end-users.
+
+
+## Considerations made with this boilerplate
+
+This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different db, it would be best to uninstall knex, pg, and postgrator-cli. You can also delete the postgrator-config.js file. 
+
+If you choose to deploy on a service other than Heroku, the Procfile can be deleted.

@@ -1,19 +1,32 @@
+const { API_TOKEN } = require('../config');
 const logger = require('./logger');
 
-// basic input validation to ensure all required inputs are received
-// Inputs: req and res objects from Express and an array of all required Inputs
-// Output: 400 status and message of first failing case, otherwise none
+module.exports = {
+  validateBody(requiredInput, req, res) {
+    requiredInput.forEach((val) => {
+      if (!req.body[val]) {
+        logger.error(`400 error on path: ${req.path} - ${val} is required`);
+        return res.status(400).send(`Invalid data`);
+      }
+    });
+  },
 
-function validationHandler(requiredInput, req, res, next) {
-  requiredInput.forEach((val) => {
-    if (!req.body[val]) {
-      logger.error(`400 error, path: ${req.path} - ${val} is required`);
-      return res.status(400).send(`Invalid data`);
+  validateBearerToken(req, res, next) {
+    const authToken = req.get('authorization');
+    if (!authToken || authToken.split(' ')[0] !== 'Bearer' || authToken.split(' ')[1] !== API_TOKEN) {
+      logger.error(`401 error on path: ${req.path} - Unauthorized request`);
+      return res.status(401).json({ error: `Unauthorized request`});
     }
-  });
+    next();
+  },
+
+  // This function will likely need to be refined - test further
+  validateParams(requiredParams, req, res) {
+    requiredParams.forEach((val) => {
+      if (!req.params[val]) {
+        logger.error(`404 error on path: ${req.path} - ${req.params[val]} not found`);
+        return res.status(404).send('Item not found');
+      }
+    });
+  }
 }
-
-module.exports = validationHandler;
-
-// consider creating getIDValidator
-// pulls params instead of body, if one or more is not present, send 404 item not found
