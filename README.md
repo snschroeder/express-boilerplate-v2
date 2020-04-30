@@ -1,4 +1,6 @@
-## Boilerplate to get an Node.js/Express app running quickly
+## Boilerplate to get a Node.js/Express app running quickly
+
+## Quick start
 
 ## Set up
 
@@ -24,3 +26,70 @@ Edit the contents of package.json to reflect the new name
 ## Deploying
 
 `heroku create` can be used to create a new Heroku application
+
+## In-depth deployment on heroku
+
+Heroku is a cloud hosting platform that works well for hosting servers. It includes integration for databases, logging, monitoring, email alerts and more. They offer a free tier to get started.
+
+1. Create a Heroku account --- https://signup.heroku.com/identity
+2. Download the Heroku CLI --- https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+3. `heroku --version` --- verifies install was successful
+4. `heroku login` --- logs you in ---  (Note: Windows is dumb so you might need to run this command from cmd.exe)
+
+## Necessary housekeeping before we deploy
+
+1. Hide yo kids, hide yo wife, hide yo secrets --- ensure all passwords, keys, tokens, etc. are in your .env file and not in your code.
+2. Remove console.logs --- please and thank you. Leaving them in is ugly at best and a security risk at worst.  
+3. Use a different API_TOKEN for deployment --- this will be set up once we have deployed.
+4. Audit your packages --- this will automatically happen when you run `npm deploy`. I'm including it here because out-of-date packages can be a security risk. Take this seriously and ensure everything is up-to-date.
+
+## Housekeeping that has already been done
+# Come back to this section if you did something dumb and want to know where to look to fix it
+
+1. Respect the PORT --- only worry about this if you messed with the config.js file.
+2. Minimize logging --- only worry about this if you messed with the morgan settings in app.js
+3. Hide sensitive error info --- only worry about this if you messed the with errorHandler.js file.
+4. Make and configure a Procfile --- Heroku uses this to determine how to start your server. Only revisit this if you removed/renamed/changed the server.js file.
+5. Specify the version of Node being used in package.json
+
+## Actually finally deploying
+
+1. `git push origin master` --- ensure your master branch on github has the latest code
+2. `heroku create` --- this initializes a Heroku app
+3. `git push heroku master` --- this uploads your code to Heroku and deploys it
+4. `heroku logs` --- we can run this to ensure everything worked
+
+## Setting environment variables in Heroku
+
+`heroku config:set API_TOKEN={paste in new token}` --- this command allows us to set environment variables (in this case the API_TOKEN) for your Heroku app.
+
+Other environment variables can be set by changing `API_TOKEN` for whatever environment variable you need to set
+
+## Important Heroku commands
+
+`heroku logs --tail` --- the tail flag provides live updates as new logs are added
+
+`heroku ps:scale web=1` --- this tells Heroku to use our one free dyno for this app. If you upgrade to a paid tier, you can change 1 for more to utilize more dynos for this app.
+
+`heroku open` --- opens the app in your browser.
+
+`heroku config` --- lists all environment variables currently set
+
+## Further Best Practices
+
+Humans are good at making mistakes. Deployment has already been partially automated through the `npm deploy` script. This will audit your packages and push the current master branch to Heroku.
+
+Running `npm deploy` is still a manual task, though.
+
+Consider using a Continuous Integration service, such as:
+
+- Circle CI
+- Travis CI
+- Jenkins
+- Gitlab
+- AWS pipeline
+- Or a bunch others (Google around and find one you like)
+
+These services will monitor the main branch and deploy it for you, though they also offer features such as running tests, sending email notifications when changes are pushed to master, and allowing for an approval process before the changes go live.
+
+Another note: devDependencies are NOT installed when you deploy to Heroku. For this reason(and others), it's important to stage your changes and test them in a "live" environment before deploying to end-users. 

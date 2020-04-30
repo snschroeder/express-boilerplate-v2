@@ -6,7 +6,7 @@ const helmet = require('helmet'); // hides sensitive data
 const errorHandler = require('./misc/errorHandler');
 const { NODE_ENV } = require('./config');
 
-const validationHandler = require('./misc/validationHandler'); // basic validation middleware
+const validationHandler = require('./misc/validationHandler'); // basic input validation middleware
 const validateBearerToken = require('./misc/validateBearerToken');
 
 //===================//
@@ -34,12 +34,6 @@ app.use(validateBearerToken);
 app.get('/', (req, res) => {
   res.send('Hello there');
 });
-
-app.post('/user', (req, res) => {
-  const requiredInput = ['username', 'password', 'favoriteClub'];
-  validationHandler(req, res, requiredInput);
-  res.send('all validation passed');
-})
 
 //===================//
 // Error Handling    //
