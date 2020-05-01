@@ -95,8 +95,8 @@ These services will monitor the main branch and deploy it for you, though they a
 Another note: devDependencies are NOT installed when you deploy to Heroku. For this reason(and others), it's important to stage your changes and test them in a "live" environment before deploying to end-users.
 
 
-## Considerations made with this boilerplate
+## Design decisions made with this boilerplate
 
-This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different db, it would be best to uninstall knex, pg, and postgrator-cli. You can also delete the postgrator-config.js file. 
+This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different db, it would be best to uninstall knex, pg, and postgrator-cli. You can also delete the postgrator-config.js file.
 
 If you choose to deploy on a service other than Heroku, the Procfile can be deleted.

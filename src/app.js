@@ -6,7 +6,7 @@ const helmet = require('helmet'); // hides sensitive data
 const errorHandler = require('./misc/errorHandler');
 const { NODE_ENV } = require('./config');
 const { validateBody, validateBearerToken } = require('./misc/validationHandler'); // basic input validation
-// const validateBearerToken = require('./misc/validateBearerToken');
+const authRouter = require('./auth/auth-router');
 
 //===================//
 // Initial setup     //
@@ -29,15 +29,17 @@ app.use(validateBearerToken);
 // Routes            //
 //===================//
 
-app.get('/', (req, res) => {
-  res.send('Hello there');
-});
+app.use(`/api/auth`, authRouter)
 
-app.post('/user', (req, res) => {
-  const reqIn = ['username', 'password', 'favoriteClub'];
-  validateBody(reqIn, req, res);
-  res.send('okay');
-})
+// app.get('/', (req, res) => {
+//   res.send('Hello there');
+// });
+
+// app.post('/user', (req, res) => {
+//   const reqIn = ['username', 'password', 'favoriteClub'];
+//   validateBody(reqIn, req, res);
+//   res.send('okay');
+// })
 
 //===================//
 // Error Handling    //
