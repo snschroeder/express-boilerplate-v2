@@ -7,6 +7,7 @@ const errorHandler = require('./misc/errorHandler');
 const { NODE_ENV } = require('./config');
 const { validateBody, validateBearerToken } = require('./misc/validationHandler'); // basic input validation
 const authRouter = require('./auth/auth-router');
+const usersRouter = require('./users/users-router');
 
 //===================//
 // Initial setup     //
@@ -29,7 +30,8 @@ app.use(validateBearerToken);
 // Routes            //
 //===================//
 
-app.use(`/api/auth`, authRouter)
+app.use(`/api/auth`, authRouter);
+app.use('/api/users/', usersRouter);
 
 // app.get('/', (req, res) => {
 //   res.send('Hello there');

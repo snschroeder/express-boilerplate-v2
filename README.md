@@ -100,3 +100,7 @@ Another note: devDependencies are NOT installed when you deploy to Heroku. For t
 This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different db, it would be best to uninstall knex, pg, and postgrator-cli. You can also delete the postgrator-config.js file.
 
 If you choose to deploy on a service other than Heroku, the Procfile can be deleted.
+
+This boilerplate also includes the service and router and handle authorization of users. This allows users to create accounts and log in.
+
+Authorization and login is handled using bcryptjs and JWT. xss is used to sanitize inputs.  
