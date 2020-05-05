@@ -2,13 +2,14 @@ const { API_TOKEN } = require('../config');
 const logger = require('./logger');
 
 module.exports = {
-  validateBody(requiredInput, req, res) {
+  validateBody(req, res, next, requiredInput) {
     requiredInput.forEach((val) => {
       if (!req.body[val]) {
         logger.error(`400 error on path: ${req.path} - ${val} is required`);
         return res.status(400).send(`Invalid data`);
       }
     });
+    next();
   },
 
   validateBearerToken(req, res, next) {

@@ -1,4 +1,3 @@
-const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 const AuthService = require('../src/auth/auth-service');
@@ -7,22 +6,19 @@ const AuthService = require('../src/auth/auth-service');
 // Initial setup     //
 //===================//
 
-describe('Auth Endpoints', () => {
+describe('Auth endpoints', () => {
   let db = helpers.setupTestDB(app);
   const testUsers = helpers.makeTestUsersArray();
   const testUser = testUsers[0];
-  const endpointPath = '/api/auth/';
+  const endpointPath = '/api/auth/login';
 
   //===================//
   // Cleanup protocol  //
   //===================//
 
-
-  after('disconnect from db', () => db.destroy());
-
   before('cleanup', () => helpers.truncateTables(db));
-
   afterEach('cleanup', () => helpers.truncateTables(db));
+  after('disconnect from db', () => db.destroy());
 
   //===================//
   // POST tests        //

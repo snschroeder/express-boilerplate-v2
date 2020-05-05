@@ -39,17 +39,7 @@ app.set('db', db);
 //===================//
 
 app.use(`/api/auth/`, authRouter);
-app.use('/api/users/', usersRouter);
-
-// app.get('/', (req, res) => {
-//   res.send('Hello there');
-// });
-
-// app.post('/user', (req, res) => {
-//   const reqIn = ['username', 'password', 'favoriteClub'];
-//   validateBody(reqIn, req, res);
-//   res.send('okay');
-// })
+app.use(`/api/users/`, usersRouter);
 
 //===================//
 // Error Handling    //
