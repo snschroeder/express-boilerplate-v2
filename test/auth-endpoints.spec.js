@@ -46,7 +46,7 @@ describe('Auth Endpoints', () => {
           .post(`${endpointPath}`)
           .send(loginAttemptBody)
           .expect(400, {
-            error: `missing ${field} in request body`,
+            error: `username and password are required`,
           })
       })
     })
@@ -56,9 +56,9 @@ describe('Auth Endpoints', () => {
       return supertest(app)
         .post(`${endpointPath}`)
         .send(invalidUser)
-        .expect(400, { error: `incorrect username or password`})
+        .expect(400, { error: `invalid username or password`})
     })
-    it(`responds 200 sends JWT auth token when valid login presented`, () => {
+    it(`responds 200 and sends JWT auth token when valid login presented`, () => {
       const testLogin = { username: testUser.username, password: testUser.password };
       const subject = testUser.username;
       const payload = { id: testUser.id, username: testUser.username };
