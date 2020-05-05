@@ -4,8 +4,8 @@ const AuthService = require('../auth/auth-service');
 async function protectedWithJWT(req, res, next) {
   const token = req.get('Authorization');
 
-  if (!token || !toekn.toLowerCase().startsWith('bearer ')) {
-    return res.status(401).json({ error: 'missing bearer token'});
+  if (!token || !token.toLowerCase().startsWith('bearer ')) {
+    return res.status(401).json({ error: 'missing bearer token' });
   }
 
   const bearerToken = token.slice(7, token.length);
@@ -15,14 +15,14 @@ async function protectedWithJWT(req, res, next) {
     const user = await AuthService.getUser(req.app.get('db'), payload.sub);
 
     if (!user) {
-      return res.status(401).json({ error: 'unauthorized request' });
+      return res.status(401).json({ error: 'unauthorized request on try' });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    if (error isntanceof JsonWebTokenError) {
-      return res.status(401).json({ error: 'unauthorized request' });
+    if (error instanceof JsonWebTokenError) {
+      return res.status(401).json({ error: 'unauthorized request on error' });
     }
     next(error);
   }

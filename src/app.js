@@ -1,10 +1,11 @@
 require('dotenv').config();
 const express = require('express');
+const knex = require('knex');
 const morgan = require('morgan'); // logging middleware
 const cors = require('cors'); // allows cross-origin resource sharing
 const helmet = require('helmet'); // hides sensitive data
 const errorHandler = require('./misc/errorHandler');
-const { NODE_ENV } = require('./config');
+const { NODE_ENV, DATABASE_URL, TEST_DATABASE_URL } = require('./config');
 const { validateBody, validateBearerToken } = require('./misc/validationHandler'); // basic input validation
 const authRouter = require('./auth/auth-router');
 const usersRouter = require('./users/users-router');
@@ -13,7 +14,14 @@ const usersRouter = require('./users/users-router');
 // Initial setup     //
 //===================//
 
+const conn = NODE_ENV === "test" ? TEST_DATABASE_URL : DATABASE_URL;
+
 const app = express();
+const db = knex({
+  client: 'pg',
+  connection: conn,
+});
+
 const morganOutput = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 //===================//
@@ -24,13 +32,13 @@ app.use(morgan(morganOutput));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(validateBearerToken);
+app.set('db', db);
 
 //===================//
 // Routes            //
 //===================//
 
-app.use(`/api/auth`, authRouter);
+app.use(`/api/auth/`, authRouter);
 app.use('/api/users/', usersRouter);
 
 // app.get('/', (req, res) => {

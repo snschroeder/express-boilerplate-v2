@@ -1,6 +1,5 @@
 const express = require('express');
 const AuthService = require('./auth-service');
-const AuthService = require('./auth-service');
 const { protectedWithJWT } = require('../middleware/auth');
 const xss = require('xss');
 
@@ -8,8 +7,9 @@ const authRouter = express.Router();
 const jsonParser = express.json();
 
 authRouter
-  .post('/login', jsonParser, (req, res, next) => {
-    let  { username, password } = req.body;
+  .route('/')
+  .post(jsonParser, async (req, res, next) => {
+    let { username, password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ error: `username and password are required`});

@@ -3,7 +3,7 @@ const REGEX_UPPER_LOWER_NUMBER = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])+/;
 
 const UsersService = {
   hashPass: (password) => {
-    rturn bcrypt.hash(password, 12);
+    return bcrypt.hash(password, 12);
   },
 
   validatePassword: (password) => {

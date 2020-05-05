@@ -12,7 +12,7 @@ const AuthService = {
 
   validatePassword: (db, username, password) => {
     return AuthService.getUser(db, username).then((user) => {
-      return bcryptjs.compare(password, user.password);
+      return bcrypt.compare(password, user.password);
     });
   },
 
