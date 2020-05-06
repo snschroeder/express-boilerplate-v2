@@ -11,9 +11,6 @@ usersRouter
   .post(jsonParser, async (req, res, next) => {
     let { username, password } = req.body;
 
-    console.log(username);
-    console.log(password);
-
     if (!username || !password) {
       return res.status(400).json({ error: 'username and password are required' });
     }
@@ -22,8 +19,6 @@ usersRouter
     password = xss(password);
 
     const isValid = await UsersService.validatePassword(password);
-
-    console.log(isValid);
 
     if (isValid !== null) {
       return res.status(400).json({ error: `${isValid}` });

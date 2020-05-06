@@ -45,7 +45,7 @@ describe('Users endpoints', () => {
           .expect(400, { error: "username and password are required" });
       });
     });
-  })
+  });
 
   context('Password validation', () => {
     it(`responds 400 password must be longer than 8 char when password is too short`, () => {
@@ -57,6 +57,26 @@ describe('Users endpoints', () => {
         .post(endpointPath)
         .send(testRegistration)
         .expect(400, { error: "password must be longer than 8 characters" });
+    });
+    it(`responds 400 password must be fewer than 50 char when password is too long`, () => {
+      const testRegistration = {
+        username: 'testUserLevi',
+        password: "arf".repeat(90),
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'password must be fewer than 50 characters' });
+    });
+    it(`responds 400 password must not begin or end with whitespace when password begins with whitespace`, () => {
+      const testRegistration = {
+        username: 'testUserTrouble',
+        password: '   Iamafailingpassword2'
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'password must not begin or end with whitespace' });
     });
   });
 });
