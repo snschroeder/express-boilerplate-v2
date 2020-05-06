@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const knex = require('knex');
 
 function setupTestDB(app) {
-  return knex({
+  let db = knex({
     client: 'pg',
     connection: process.env.TEST_DATABASE_URL,
   });

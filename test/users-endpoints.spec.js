@@ -17,9 +17,9 @@ describe('Users endpoints', () => {
 // Cleanup protocol  //
 //===================//
 
+  after('disconnect from db', () => db.destroy());
   before('cleanup', () => helpers.truncateTables(db));
   afterEach('cleanup', () => helpers.truncateTables(db));
-  after('disconnect from db', () => db.destroy());
 
 //===================//
 // POST tests        //
@@ -36,27 +36,27 @@ describe('Users endpoints', () => {
         password: 'password',
       };
 
-      it(`responds 400 username/password required when one is missing`, () => {
+      it(`responds 400 username and password are required when ${field} is missing`, () => {
         delete regAttemptBody[field];
 
         return supertest(app)
-          .post('api/users/')
+          .post(endpointPath)
           .send(regAttemptBody)
           .expect(400, { error: "username and password are required" });
       });
     });
+  })
 
-    context('Password validation', () => {
-      it(`responds 400 password must be longer than 8 char when password is too short`, () => {
-        const testRegistration = {
-          username: 'testUserBob',
-          password: '123abc',
-        };
-        return supertest(app)
-          .post(endpointPath)
-          .send(testRegistration)
-          .expect(400, { error: "password must be longer than 8 characters" });
-      });
-    })
+  context('Password validation', () => {
+    it(`responds 400 password must be longer than 8 char when password is too short`, () => {
+      const testRegistration = {
+        username: 'testUserBob',
+        password: '123abc',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: "password must be longer than 8 characters" });
+    });
   });
-})
+});

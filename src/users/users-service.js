@@ -17,7 +17,7 @@ const UsersService = {
       return 'password must not begin or end with whitespace';
     }
     if (!REGEX_UPPER_LOWER_NUMBER.test(password)) {
-      return 'password must contain at least one upper case, lower case, and number characters';
+      return 'password must contain at least one uppercase, lowercase, and number characters';
     }
     return null;
   },
