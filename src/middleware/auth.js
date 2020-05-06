@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
 const AuthService = require('../auth/auth-service');
 
+// eslint-disable-next-line consistent-return
 async function protectedWithJWT(req, res, next) {
   const token = req.get('Authorization');
 
@@ -15,14 +15,15 @@ async function protectedWithJWT(req, res, next) {
     const user = await AuthService.getUser(req.app.get('db'), payload.sub);
 
     if (!user) {
-      return res.status(401).json({ error: 'unauthorized request on try' });
+      return res.status(401).json({ error: 'unauthorized request' });
     }
 
     req.user = user;
     next();
   } catch (error) {
+    // eslint-disable-next-line no-undef
     if (error instanceof JsonWebTokenError) {
-      return res.status(401).json({ error: 'unauthorized request on error' });
+      return res.status(401).json({ error: 'unauthorized request' });
     }
     next(error);
   }

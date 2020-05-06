@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
+const xss = require('xss');
 const express = require('express');
 const UsersService = require('./users-service');
-// const { validateBody } = require('../misc/validationHandler');
-const xss = require('xss');
 
 const usersRouter = express.Router();
 const jsonParser = express.json();
@@ -35,10 +35,11 @@ usersRouter
     const newUser = await UsersService.createNewUser(req.app.get('db'), username, hashedPass);
 
     return res.status(201).json(newUser);
-});
+  });
 
 usersRouter.route('/:user_id').get(async (req, res, next) => {
-  let user_id = req.params.user_id;
+  // eslint-disable-next-line camelcase
+  const { user_id } = req.params;
   const user = await UsersService.getUser(req.app.get('db'), user_id);
 
   if (!user) {

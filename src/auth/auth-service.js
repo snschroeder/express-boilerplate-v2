@@ -3,32 +3,23 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 const AuthService = {
-  getUser: (db, username) => {
-    return db('users')
-      .select('*')
-      .where({ username })
-      .first()
-  },
+  getUser: (db, username) => db('users')
+    .select('*')
+    .where({ username })
+    .first(),
 
-  validatePassword: (db, username, password) => {
-    return AuthService.getUser(db, username).then((user) => {
-      return bcrypt.compare(password, user.password);
-    });
-  },
+  // eslint-disable-next-line max-len
+  validatePassword: (db, username, password) => AuthService.getUser(db, username).then((user) => bcrypt.compare(password, user.password)),
 
-  createJWT: (subject, payload) => {
-    return jwt.sign(payload, config.JWT_SECRET, {
-      subject,
-      expiresIn: '1h',
-      algorithm: 'HS256',
-    });
-  },
+  createJWT: (subject, payload) => jwt.sign(payload, config.JWT_SECRET, {
+    subject,
+    expiresIn: '1h',
+    algorithm: 'HS256',
+  }),
 
-  verifyJWT: (token) => {
-    return jwt.verify(token, config.JWT_SECRET, {
-      algorith: 'HS256',
-    });
-  },
-}
+  verifyJWT: (token) => jwt.verify(token, config.JWT_SECRET, {
+    algorith: 'HS256',
+  }),
+};
 
 module.exports = AuthService;

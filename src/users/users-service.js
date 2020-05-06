@@ -1,10 +1,9 @@
 const bcrypt = require('bcryptjs');
+
 const REGEX_UPPER_LOWER_NUMBER = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])+/;
 
 const UsersService = {
-  hashPass: (password) => {
-    return bcrypt.hash(password, 12);
-  },
+  hashPass: (password) => bcrypt.hash(password, 12),
 
   validatePassword: (password) => {
     if (password.length < 8) {
@@ -28,36 +27,26 @@ const UsersService = {
     return null;
   },
 
-  validateNewUser: (db, username) => {
-    return db('users')
-      .select('*')
+  validateNewUser: (db, username) => db('users')
+    .select('*')
+    .where({ username })
+    .first(),
+
+  createNewUser: (db, username, password) => db('users')
+    .insert({ username, password })
+    .then(() => db('users')
+      .select('id', 'username')
       .where({ username })
-      .first();
-  },
+      .first()),
 
-  createNewUser: (db, username, password) => {
-    return db('users')
-      .insert({ username, password })
-      .then(() => {
-        return db('users')
-          .select('id', 'username')
-          .where({ username })
-          .first();
-      });
-  },
+  updateUser: (db, username, updateFields) => db('users')
+    .where({ username })
+    .update(updateFields),
 
-  updateUser: (db, username, updateFields) => {
-    return db('users')
-      .where({ username })
-      .update(updateFields);
-  },
-
-  getUser: (db, id) => {
-    return db('users')
-      .select('id')
-      .where({ id })
-      .first();
-  },
-}
+  getUser: (db, id) => db('users')
+    .select('id')
+    .where({ id })
+    .first(),
+};
 
 module.exports = UsersService;

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const knex = require('knex');
 
 function setupTestDB(app) {
-  let db = knex({
+  const db = knex({
     client: 'pg',
     connection: process.env.TEST_DATABASE_URL,
   });
@@ -16,14 +16,14 @@ function makeTestUsersArray() {
     {
       id: '53d25d5f-a033-40b3-a253-84172a514973',
       username: 'test-user-1',
-      password: 'testPassword1'
+      password: 'testPassword1',
     },
     {
       id: 'cc5fe585-8682-4499-a04e-6255b42116c1',
       username: 'test-user-2',
-      password: 'Testpass12345'
+      password: 'Testpass12345',
     },
-  ]
+  ];
 }
 
 function seedUsers(db, users) {
@@ -44,12 +44,11 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 }
 
 function truncateTables(db) {
-  return db.transaction(trx =>
-    trx.raw(
-      `TRUNCATE
+  return db.transaction((trx) => trx.raw(
+    `TRUNCATE
         users
-        RESTART IDENTITY CASCADE;`
-    ));
+        RESTART IDENTITY CASCADE;`,
+  ));
 }
 
 module.exports = {

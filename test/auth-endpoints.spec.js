@@ -1,28 +1,29 @@
+/* eslint-disable no-undef */
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 const AuthService = require('../src/auth/auth-service');
 
-//===================//
-// Initial setup     //
-//===================//
+// =================== //
+// Initial setup       //
+// =================== //
 
 describe('Auth endpoints', () => {
-  let db = helpers.setupTestDB(app);
+  const db = helpers.setupTestDB(app);
   const testUsers = helpers.makeTestUsersArray();
   const testUser = testUsers[0];
   const endpointPath = '/api/auth/login';
 
-  //===================//
-  // Cleanup protocol  //
-  //===================//
+  // =================== //
+  // Cleanup protocol    //
+  // =================== //
 
   after('disconnect from db', () => db.destroy());
   before('cleanup', () => helpers.truncateTables(db));
   afterEach('cleanup', () => helpers.truncateTables(db));
 
-  //===================//
-  // POST tests        //
-  //===================//
+  // =================== //
+  // POST tests          //
+  // =================== //
 
   describe(`POST ${endpointPath}`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
@@ -35,26 +36,26 @@ describe('Auth endpoints', () => {
         password: testUser.password,
       };
 
-      it(`responds 400 required error when ${field} is missing`, () =>{
-        delete loginAttemptBody[field]
+      it(`responds 400 required error when ${field} is missing`, () => {
+        delete loginAttemptBody[field];
 
         return supertest(app)
           .post(`${endpointPath}`)
           .send(loginAttemptBody)
           .expect(400, {
-            error: `username and password are required`,
-          })
-      })
-    })
+            error: 'username and password are required',
+          });
+      });
+    });
 
-    it(`responds 400 invalid username or password when given bad username`, () => {
+    it('responds 400 invalid username or password when given bad username', () => {
       const invalidUser = { username: 'bogus-user', password: 'hunter42' };
       return supertest(app)
         .post(`${endpointPath}`)
         .send(invalidUser)
-        .expect(400, { error: `invalid username or password`})
-    })
-    it(`responds 200 and sends JWT auth token when valid login presented`, () => {
+        .expect(400, { error: 'invalid username or password' });
+    });
+    it('responds 200 and sends JWT auth token when valid login presented', () => {
       const testLogin = { username: testUser.username, password: testUser.password };
       const subject = testUser.username;
       const payload = { id: testUser.id, username: testUser.username };
@@ -62,8 +63,8 @@ describe('Auth endpoints', () => {
         .post(`${endpointPath}`)
         .send(testLogin)
         .expect(200, {
-            authToken: AuthService.createJWT(subject, payload),
+          authToken: AuthService.createJWT(subject, payload),
         });
     });
   });
-})
+});

@@ -1,3 +1,14 @@
+TODO
+- install AirBnB linter
+- investigate sequelize
+- finish out readme
+- delete unused functions
+- ensure all console.logging is removed
+- check if db connection selector in app.js is Necessary
+
+- set up logic to only allow a certain number of login attempts?
+- set up password reset logic?
+
 ## Boilerplate to get a Node.js/Express app running quickly
 
 ## Quick start

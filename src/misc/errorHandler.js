@@ -1,6 +1,7 @@
 const { NODE_ENV } = require('../config');
 const logger = require('./logger');
 
+// eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
   logger.error(err.message);
   const response = NODE_ENV === 'production'
