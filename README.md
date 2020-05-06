@@ -1,15 +1,8 @@
-TODO
-- install AirBnB linter
-- investigate sequelize
-- finish out readme
-- delete unused functions
-- ensure all console.logging is removed
-- check if db connection selector in app.js is Necessary
+# Boilerplate to get a Node.js/Express app running quickly
 
-- set up logic to only allow a certain number of login attempts?
-- set up password reset logic?
+## What is this?
 
-## Boilerplate to get a Node.js/Express app running quickly
+This is a RESTful Node.js/Express boilerplate design to jumpstart API development. It includes enpoints for authorization and users, as well as the bits and bobbles needed to hook up a PostgreSQL database. 
 
 ## Quick start
 
@@ -22,17 +15,20 @@ TODO
 
 ## Misc Set up
 
-Edit the contents of package.json to reflect the new name
+- Edit the contents of package.json to reflect the name of the new project
+- Change this README to reflect the new project
 
 ## Scripts
 
-`npm start` --- starts the application
+- `npm start` --- starts the application
+- `npm run dev` --- starts the application using nodemon to enable live reloads
+- `npm test` --- runs tests
+- `npm deploy` --- deploys the app once Heroku has been configured
+- `npm run migrate` --- creates tables once postgreSQL db has been configured
+- `npm run migrate:test` --- creates tables once postgreSQL test db has been configured
+- `npm run seed` --- seeds db with starter data. Run after a successful `npm run migrate`
+- `npm run seed:test` --- seeds test db with starter data. Run after a successful `npm run migrate:test`
 
-`npm run dev` --- starts the application using nodemon to enable live reloads
-
-`npm test` --- runs tests
-
-`npm deploy` --- deploys the app once Heroku has been configured
 
 ## Deploying
 
@@ -59,8 +55,8 @@ Heroku is a cloud hosting platform that works well for hosting servers. It inclu
 
 1. Respect the PORT --- only worry about this if you messed with the config.js file.
 2. Minimize logging --- only worry about this if you messed with the morgan settings in app.js
-3. Hide sensitive error info --- only worry about this if you messed the with errorHandler.js file.
-4. Make and configure a Procfile --- Heroku uses this to determine how to start your server. Only revisit this if you removed/renamed/changed the server.js file.
+3. Hide sensitive error info --- clean up error output from endpoints to ensure no sensitive info is being shared
+4. Make and configure a Procfile --- Heroku uses this to determine how to start your server. Only revisit this if you removed/renamed/changed the server.js file or deleted the Procfile
 5. Specify the version of Node being used in package.json
 
 ## Actually finally deploying
@@ -78,13 +74,10 @@ Other environment variables can be set by changing `API_TOKEN` for whatever envi
 
 ## Important Heroku commands
 
-`heroku logs --tail` --- the tail flag provides live updates as new logs are added
-
-`heroku ps:scale web=1` --- this tells Heroku to use our one free dyno for this app. If you upgrade to a paid tier, you can change 1 for more to utilize more dynos for this app.
-
-`heroku open` --- opens the app in your browser.
-
-`heroku config` --- lists all environment variables currently set
+- `heroku logs --tail` --- the tail flag provides live updates as new logs are added
+- `heroku ps:scale web=1` --- this tells Heroku to use our one free dyno for this app. If you upgrade to a paid tier, you can change 1 for more to utilize more dynos for this app.
+- `heroku open` --- opens the app in your browser.
+- `heroku config` --- lists all environment variables currently set
 
 ## Further Best Practices
 
@@ -108,10 +101,8 @@ Another note: devDependencies are NOT installed when you deploy to Heroku. For t
 
 ## Design decisions made with this boilerplate
 
-This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different db, it would be best to uninstall knex, pg, and postgrator-cli. You can also delete the postgrator-config.js file.
+This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different RDBMS, you should run `npm uninstall pg`. 
+
+If you want to use a noSQL db, run `npm unistall pg postgrator-cli knex`. You can also delete the postgrator-config.js file, as well as the the migration and seed files.
 
 If you choose to deploy on a service other than Heroku, the Procfile can be deleted.
-
-This boilerplate also includes the service and router and handle authorization of users. This allows users to create accounts and log in.
-
-Authorization and login is handled using bcryptjs and JWT. xss is used to sanitize inputs.  
