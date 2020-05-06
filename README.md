@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is a RESTful Node.js/Express boilerplate design to jumpstart API development. It includes enpoints for authorization and users, as well as the bits and bobbles needed to hook up a PostgreSQL database. 
+This is a RESTful Node.js/Express boilerplate design to jumpstart API development. It includes enpoints for authorization and users, as well as the bits and bobbles needed to hook up a PostgreSQL database.
 
 ## Quick start
 
@@ -100,6 +100,10 @@ Another note: devDependencies are NOT installed when you deploy to Heroku. For t
 
 
 ## Design decisions made with this boilerplate
+
+Password expectations: 8 to 50 characters, must contain at least one lowercase, uppercase, and number character. Must not begin or end with whitespace.
+
+Username expectations: 3 to 32 characters, must not begin or end with whitespace. Does not allow duplicate usernames in the database.
 
 This boilerplate includes dependencies specifically for deploying, managing, and interfacing with a PostgreSQL database. If you want to use a different RDBMS, you should run `npm uninstall pg`. 
 

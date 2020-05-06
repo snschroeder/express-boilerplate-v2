@@ -4,7 +4,7 @@ const app = require('../src/app');
 const helpers = require('./test-helpers');
 
 // =================== //
-// Initial setup     //
+// Initial setup       //
 // =================== //
 
 describe('Users endpoints', () => {
@@ -15,7 +15,7 @@ describe('Users endpoints', () => {
 
 
   // =================== //
-  // Cleanup protocol  //
+  // Cleanup protocol    //
   // =================== //
 
   after('disconnect from db', () => db.destroy());
