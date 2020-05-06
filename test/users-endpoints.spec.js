@@ -194,4 +194,29 @@ describe('Users endpoints', () => {
         });
       });
   });
+
+//===================//
+// GET tests         //
+//===================//
+
+  describe(`GET ${endpointPath}/:user_id`, () => {
+    beforeEach('insert users', () => helpers.seedUsers(db, testUsersArray));
+
+    it('responds 400 user does not exist when user does not exist in the db', () => {
+      return supertest(app)
+        .get(`${endpointPath}/00000000-0000-0000-0000-000000000000`)
+        .expect(400, { error: 'user does not exist' });
+    });
+    it('responds 200 with user data when user is present', () => {
+      return supertest(app)
+      .get(`${endpointPath}/cc5fe585-8682-4499-a04e-6255b42116c1`)
+      .expect(200)
+      .then((res) => {
+        const expectedUserData = { ...testUsersArray[1] };
+        delete expectedUserData['password'];
+        delete expectedUserData['username'];
+        chai.expect(res.body).to.eql(expectedUserData);
+      })
+    })
+  });
 });
