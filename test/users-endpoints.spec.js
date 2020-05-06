@@ -78,5 +78,96 @@ describe('Users endpoints', () => {
         .send(testRegistration)
         .expect(400, { error: 'password must not begin or end with whitespace' });
     });
+    it(`responds 400 password must not begin or end with whitespace when password ends with whitespace`, () => {
+      const testRegistration = {
+        username: 'testUserMax',
+        password: 'Iamalsoafailingpassword44    ',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'password must not begin or end with whitespace' });
+    });
+    it(`respnds 400 password must contain at least one uppercase, lowercase, and number characters when password is too simple`, () => {
+      const testRegistration = {
+        username: 'testUserMackenzie',
+        password: 'abc12345',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'password must contain at least one uppercase, lowercase, and number characters'});
+    });
   });
+  context('Username validation', () => {
+    // it(`responds 400 invalid username when username is already taken`, () => {
+    //   const testRegistration = {
+    //     username: testUser.username,
+    //     password: 'NewPasswordletsGoo11!!',
+    //   };
+    //   return supertest(app)
+    //     .post(endpointPath)
+    //     .send(testRegistration)
+    //     .expect(400, { error: 'username is invalid' });
+    // });
+    it(`responds 400 invalid username when username is too short`, () => {
+      const testRegistration = {
+        username: 'ab',
+        password: 'NewPasswordletsGoo11!!',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'username is invalid' });
+    });
+    it(`responds 400 invalid username when username is too long`, () => {
+      const testRegistration = {
+        username: 'ab'.repeat(50),
+        password: 'NewPasswordletsGoo11!!',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'username is invalid' });
+    });
+    it(`responds 400 invalid username when username begins with whitespace`, () => {
+      const testRegistration = {
+        username: '  bob',
+        password: 'NewPasswordletsGoo11!!',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'username is invalid' });
+    });
+    it(`responds 400 invalid username when username ends with whitespace`, () => {
+      const testRegistration = {
+        username: 'differentbob    ',
+        password: 'NewPasswordletsGoo11!!',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(400, { error: 'username is invalid' });
+    });
+  });
+  context('Given Valid Registration', () => {
+    it('responds 201 with { id, username }', () => {
+      const testRegistration = {
+        username: 'theOneTrueBob',
+        password: 'NewPasswordletsGoo11!!',
+      };
+      return supertest(app)
+        .post(endpointPath)
+        .send(testRegistration)
+        .expect(201)
+        .expect((res) => {
+          chai.expect(res.body).to.have.property('id');
+          chai.expect(res.body).to.have.property('username');
+          chai.expect(res.body).to.not.have.property('password');
+          chai.expect(res.body.id).to.have.lengthOf(36);
+          chai.expect(res.body.username).to.eql(testRegistration.username);
+        });
+      });
+    });
 });

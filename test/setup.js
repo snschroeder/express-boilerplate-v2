@@ -3,8 +3,8 @@ process.env.JWT_SECRET = 'test-jwt-secret';
 
 require('dotenv').config();
 
-const { expect } = require('chai');
+const chai = require('chai');
 const supertest = require('supertest');
 
-global.expect = expect;
+global.chai = chai;
 global.supertest = supertest;
