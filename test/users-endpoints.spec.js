@@ -29,7 +29,6 @@ describe('Users endpoints', () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsersArray));
 
     const requiredFields = ['username', 'password'];
-
     requiredFields.forEach((field) => {
       const regAttemptBody = {
         username: 'testUser',
@@ -38,14 +37,13 @@ describe('Users endpoints', () => {
 
       it(`responds 400 username and password are required when ${field} is missing`, () => {
         delete regAttemptBody[field];
-
         return supertest(app)
           .post(endpointPath)
           .send(regAttemptBody)
           .expect(400, { error: "username and password are required" });
       });
     });
-  });
+
 
   context('Password validation', () => {
     it(`responds 400 password must be longer than 8 char when password is too short`, () => {
@@ -97,77 +95,103 @@ describe('Users endpoints', () => {
         .post(endpointPath)
         .send(testRegistration)
         .expect(400, { error: 'password must contain at least one uppercase, lowercase, and number characters'});
-    });
-  });
-  context('Username validation', () => {
-    // it(`responds 400 invalid username when username is already taken`, () => {
-    //   const testRegistration = {
-    //     username: testUser.username,
-    //     password: 'NewPasswordletsGoo11!!',
-    //   };
-    //   return supertest(app)
-    //     .post(endpointPath)
-    //     .send(testRegistration)
-    //     .expect(400, { error: 'username is invalid' });
-    // });
-    it(`responds 400 invalid username when username is too short`, () => {
-      const testRegistration = {
-        username: 'ab',
-        password: 'NewPasswordletsGoo11!!',
-      };
-      return supertest(app)
-        .post(endpointPath)
-        .send(testRegistration)
-        .expect(400, { error: 'username is invalid' });
-    });
-    it(`responds 400 invalid username when username is too long`, () => {
-      const testRegistration = {
-        username: 'ab'.repeat(50),
-        password: 'NewPasswordletsGoo11!!',
-      };
-      return supertest(app)
-        .post(endpointPath)
-        .send(testRegistration)
-        .expect(400, { error: 'username is invalid' });
-    });
-    it(`responds 400 invalid username when username begins with whitespace`, () => {
-      const testRegistration = {
-        username: '  bob',
-        password: 'NewPasswordletsGoo11!!',
-      };
-      return supertest(app)
-        .post(endpointPath)
-        .send(testRegistration)
-        .expect(400, { error: 'username is invalid' });
-    });
-    it(`responds 400 invalid username when username ends with whitespace`, () => {
-      const testRegistration = {
-        username: 'differentbob    ',
-        password: 'NewPasswordletsGoo11!!',
-      };
-      return supertest(app)
-        .post(endpointPath)
-        .send(testRegistration)
-        .expect(400, { error: 'username is invalid' });
-    });
-  });
-  context('Given Valid Registration', () => {
-    it('responds 201 with { id, username }', () => {
-      const testRegistration = {
-        username: 'theOneTrueBob',
-        password: 'NewPasswordletsGoo11!!',
-      };
-      return supertest(app)
-        .post(endpointPath)
-        .send(testRegistration)
-        .expect(201)
-        .expect((res) => {
-          chai.expect(res.body).to.have.property('id');
-          chai.expect(res.body).to.have.property('username');
-          chai.expect(res.body).to.not.have.property('password');
-          chai.expect(res.body.id).to.have.lengthOf(36);
-          chai.expect(res.body.username).to.eql(testRegistration.username);
-        });
       });
     });
+    context('Username validation', () => {
+      it(`responds 400 invalid username when username is already taken`, () => {
+        const testRegistration = {
+          username: testUser.username,
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(400, { error: 'username is invalid' });
+      });
+      it(`responds 400 invalid username when username is too short`, () => {
+        const testRegistration = {
+          username: 'ab',
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(400, { error: 'username is invalid' });
+      });
+      it(`responds 400 invalid username when username is too long`, () => {
+        const testRegistration = {
+          username: 'ab'.repeat(50),
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(400, { error: 'username is invalid' });
+      });
+      it(`responds 400 invalid username when username begins with whitespace`, () => {
+        const testRegistration = {
+          username: '  bob',
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(400, { error: 'username is invalid' });
+      });
+      it(`responds 400 invalid username when username ends with whitespace`, () => {
+        const testRegistration = {
+          username: 'differentbob    ',
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(400, { error: 'username is invalid' });
+      });
+    });
+    context('Given Valid Registration', () => {
+      it('responds 201 with { id, username }', () => {
+        const testRegistration = {
+          username: 'theOneTrueBob',
+          password: 'NewPasswordletsGoo11!!',
+        };
+        return supertest(app)
+          .post(endpointPath)
+          .send(testRegistration)
+          .expect(201)
+          .expect((res) => {
+            chai.expect(res.body).to.have.property('id');
+            chai.expect(res.body).to.have.property('username');
+            chai.expect(res.body).to.not.have.property('password');
+            chai.expect(res.body.id).to.have.lengthOf(36);
+            chai.expect(res.body.username).to.eql(testRegistration.username);
+          });
+        });
+        it('stores the new user in the db with a hashed password', () => {
+          const testRegistration = {
+            username: 'BobsBrotherRobert',
+            password: 'NewPasswordletsGoo11!!',
+          };
+          return supertest(app)
+            .post(endpointPath)
+            .send(testRegistration)
+            .expect((res) => {
+              const { id } = res.body;
+              db('users')
+                .select('*')
+                .where({ id })
+                .first()
+                .then(async (row) => {
+                  const {username, password } = row;
+                  chai.expect(username).to.eql(testRegistration.username);
+                  const passesMatch = await bcrypt.compare(
+                    testRegistration.password,
+                    password
+                  );
+                  chai.expect(passesMatch).to.be.true;
+                });
+            });
+        });
+      });
+  });
 });

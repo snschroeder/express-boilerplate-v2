@@ -16,9 +16,9 @@ describe('Auth endpoints', () => {
   // Cleanup protocol  //
   //===================//
 
+  after('disconnect from db', () => db.destroy());
   before('cleanup', () => helpers.truncateTables(db));
   afterEach('cleanup', () => helpers.truncateTables(db));
-  after('disconnect from db', () => db.destroy());
 
   //===================//
   // POST tests        //

@@ -26,6 +26,7 @@ usersRouter
 
     const usernameIsValid = await UsersService.validateUsername(username);
     const usernameExists = await UsersService.validateNewUser(req.app.get('db'), username);
+    console.log(usernameExists);
 
     if (usernameExists || usernameIsValid !== null) {
       return res.status(400).json({ error: 'username is invalid' });
